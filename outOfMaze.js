@@ -2,13 +2,13 @@
 
 let maze = [
     ['#', '#', '#', '#', '#', '#', '#', '#', '#'],
-    ['#', '+', '+', '+', '#', '+', '+', '+', '#'],
-    ['#', '+', '#', '+', '#', '+', '#', '+', '#'],
-    ['#', '+', '#', '+', '0', '+', '#', '+', '#'],
-    ['#', '+', '#', '+', '+', '#', '#', '#', '#'],
-    ['#', '+', '+', '+', '+', '#', '#', '#', '#'],
-    ['#', '+', '+', '#', '+', '#', '#', '#', '#'],
-    ['#', '+', '#', '#', '#', '#', '#', '#', '#'],
+    ['#', '#', '#', '#', '#', '#', '#', '#', '#'],
+    ['#', '#', '#', '#', '#', '#', '#', '#', '#'],
+    ['#', '#', '#', '#', '0', '+', '+', '+', '+'],
+    ['#', '#', '#', '#', '#', '#', '#', '#', '#'],
+    ['#', '#', '#', '#', '#', '#', '#', '#', '#'],
+    ['#', '#', '#', '#', '#', '#', '#', '#', '#'],
+    ['#', '#', '#', '#', '#', '#', '#', '#', '#'],
 ]
 
 function outOfMaze(maze) {
@@ -26,6 +26,7 @@ function outOfMaze(maze) {
     let notVisited = new Set();
     let way = [];
 
+    //находим старт
     let iStart = maze.findIndex(elem => elem.includes('0'));
     let jStart = maze[iStart].indexOf('0');
 
@@ -35,6 +36,7 @@ function outOfMaze(maze) {
 
     let finishNode = step(startNode);
 
+    //проверяем есть ли выход и, если есть, восстанавливаем путь
     if (finishNode) {
         createWay(finishNode)
         return way.reverse();
@@ -44,6 +46,7 @@ function outOfMaze(maze) {
 
     function step(node) {
 
+        //условия выхода из рекурсии - достигнута последняя точка или очередь пуста
         if (notVisited.size === 0) return false;
         else if (node.i === 0 || node.j === 0 || node.i === maze.length - 1 || node.j === maze[0].length - 1) return node;
 
@@ -67,20 +70,17 @@ function outOfMaze(maze) {
     }
 
     function createWay(node) {
-
         let parent = visited[node.parent];
 
+        //если родителя нет значит мы достигли начальной точки
         if(!parent) return
         
         if (parent.i === node.i) {
             parent.j > node.j ? way.push('left') : way.push('right');
         } else {
             parent.i > node.i ? way.push('top') : way.push('bottom')
-        }
-        
+        }       
         createWay(parent)
     }
 }
-
-console.log(outOfMaze(maze))
 
